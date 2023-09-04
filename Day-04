@@ -1,0 +1,39 @@
+141. Linked List Cycle
+STATEMENT:
+Given head, the head of a linked list, determine if the linked list has a cycle in it.
+There is a cycle in a linked list if there is some node in the list that can be reached again by
+continuously following the next pointer. Internally, pos is used to denote the index of the node that
+tail's next pointer is connected to. Note that pos is not passed as a parameter.
+
+Return true if there is a cycle in the linked list. Otherwise, return false.
+
+SOLUTION:
+class Solution
+{
+public:
+    bool hasCycle(ListNode *head)
+    {
+        if (head == nullptr || head->next == nullptr)
+        {
+            // If the list is empty or has only one node, there can't be a cycle.
+            return false;
+        }
+
+        ListNode *f1 = head;
+        ListNode *f2 = head->next; // Start f2 pointer one step ahead
+
+        while (f1 != f2)
+        {
+            if (f2->next == nullptr || f2->next-> == nullptr)
+            {
+                // If f2 reaches the end of the list, there's no cycle.
+                return false;
+            }
+            f1 = f1->next;
+            f2 = f2->next->next; // Move f2 pointer two steps at a time
+        }
+
+        // If we exit the loop, it means f2 caught up to f1, so there is a cycle.
+        return true;
+    }
+};
