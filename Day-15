@@ -1,0 +1,69 @@
+1584. Min Cost to Connect All Points
+
+STATEMENT
+You are given an array points representing integer coordinates of some points on a 2D-plane, 
+where points[i] = [xi, yi].
+The cost of connecting two points [xi, yi] and [xj, yj] is the manhattan distance between them: 
+|xi - xj| + |yi - yj|, where |val| denotes the absolute value of val.
+Return the minimum cost to make all points connected. All points are connected 
+if there is exactly one simple path between any two points.
+
+SOLUTION
+class Solution
+{
+public:
+
+    int find(int x, vector<int>& parent)
+    {
+        if(parent[x]!=x)
+        {
+            parent[x]=find(parent[x], parent);
+        }
+        return parent[x];
+    }
+
+    int minCostConnectPoints(vector<vector<int>>& points)
+    {
+        int n=points.size();
+        vector<pair<int, pair<int, int>>> edges;
+
+        for(int i=0; i<n; i++)
+        {
+            for(int j=i+1; j<n; j++)
+            {
+                int d=abs(points[i][0] -points[j][0]) + abs(points[i][1]-points[j][1]);
+                edges.push_back({d, {i, j}});
+                               }
+            }
+
+            sort(edges.begin(), edges.end());
+
+            vector<int>parent(n);
+            iota(parent.begin(), parent.end(), 0);
+
+            int cost=0, cnt=0;
+
+            for (const auto& edge : edges)
+            {
+                int u = edge.second.first;
+                int v = edge.second.second;
+                int w = edge.first;
+
+                if (find(u, parent) != find(v, parent))
+                {
+                    cost += w;
+                    parent[find(u, parent)] = find(v, parent);
+                    cnt++;
+
+                    if (cnt == n - 1)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return cost;
+
+        }
+    };
+
