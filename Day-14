@@ -1,0 +1,49 @@
+332. Reconstruct Itinerary
+
+STATEMENT
+You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and 
+the arrival airports of one flight. Reconstruct the itinerary in order and return it.
+All of the tickets belong to a man who departs from "JFK", thus, the itinerary must begin with "JFK". 
+If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order 
+when read as a single string.
+For example, the itinerary ["JFK", "LGA"] has a smaller lexical order than ["JFK", "LGB"].
+You may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.
+
+SOLUTION
+class Solution
+{
+public:
+    void dfs(const string& airport, unordered_map<string, vector<string>>& graph, vector<string>& ans)
+    {
+        while (!graph[airport].empty())
+        {
+            string next = graph[airport].back();
+            graph[airport].pop_back();
+            dfs(next, graph, ans);
+        }
+
+        ans.push_back(airport);
+    }
+    vector<string> findItinerary(vector<vector<string>>& tickets)
+    {
+        unordered_map<string, vector<string>> graph;
+        for(auto& ticket: tickets)
+        {
+            graph[ticket[0]].push_back(ticket[1]);
+        }
+
+        for(auto& [first, second]: graph)
+        {
+            sort(second.rbegin(), second.rend());
+        }
+
+        vector<string>ans;
+
+        dfs("JFK", graph, ans);
+
+        reverse(ans.begin(), ans.end());
+        
+        return ans;
+
+    }
+};
