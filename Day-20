@@ -1,0 +1,41 @@
+1658. Minimum Operations to Reduce X to Zero
+
+STATEMENT
+You are given an integer array nums and an integer x. In one operation, you can either remove the leftmost or 
+the rightmost element from the array nums and subtract its value from x. 
+Note that this modifies the array for future operations.
+Return the minimum number of operations to reduce x to exactly 0 if it is possible, otherwise, return -1.
+
+SOLUTION
+class Solution
+{
+public:
+    int minOperations(vector<int>& nums, int x)
+    {
+        int n = nums.size();
+        int target = accumulate(nums.begin(), nums.end(), 0) - x;
+        if (target < 0) return -1;
+
+        int left = 0, right = 0, currentSum = 0;
+        int minLength = INT_MAX;
+
+        while (right < n)
+        {
+            currentSum += nums[right];
+            right++;
+
+            while (currentSum > target)
+            {
+                currentSum -= nums[left];
+                left++;
+            }
+
+            if (currentSum == target)
+            {
+                minLength = min(minLength, n - (right - left));
+            }
+        }
+
+        return (minLength == INT_MAX) ? -1 : minLength;
+    }
+};
