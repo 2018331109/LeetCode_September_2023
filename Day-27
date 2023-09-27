@@ -1,0 +1,51 @@
+880. Decoded String at Index
+
+STATEMENT
+You are given an encoded string s. To decode the string to a tape, the encoded string is read one character 
+at a time and the following steps are taken:
+    If the character read is a letter, that letter is written onto the tape.
+    If the character read is a digit d, the entire current tape is repeatedly written d - 1 more times in total.
+Given an integer k, return the kth letter (1-indexed) in the decoded string.
+
+SOLUTION
+class Solution
+{
+public:
+    std::string decodeAtIndex(std::string inputString, int k)
+    {
+        long long decodedLength = 0;
+        for (auto character : inputString)
+        {
+            if (isdigit(character))
+            {
+
+                decodedLength *= character - '0';
+            }
+            else
+            {
+
+                decodedLength++;
+            }
+        }
+
+
+        for (int i = inputString.size() - 1; i >= 0; i--)
+        {
+            if (isdigit(inputString[i]))
+            {
+
+                decodedLength /= (inputString[i] - '0');
+                k = k % decodedLength;
+            }
+            else
+            {
+
+                if (k == 0 || decodedLength == k)
+                    return string("") + inputString[i];
+                decodedLength--;
+            }
+        }
+
+        return "";
+    }
+};
